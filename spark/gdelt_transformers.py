@@ -32,16 +32,16 @@ class GdeltTransformer(object):
         tmp = movie_df.join(g_df, on=cond)
         tmp = tmp.groupBy(tmp.show_id, tmp.movie_title, tmp.SOURCEURLS, tmp.NUMARTS, tmp.TONE).count().withColumn(
             "MONTH", f.lit(self.month)).withColumn("YEAR", f.lit(self.year))
-        tmp = self.col_split(tmp)
-        tmp.write.parquet("s3a://{}/parquet/".format(bucket) + self.year + self.month + ".parquet")
+        joined_table = self.col_split(tmp)
+        joined_table.write.parquet("s3a://{}/parquet/".format(bucket) + self.year + self.month + ".parquet")
 
-    def col_split(self, tmp):
+    def col_split(self, joined_table):
         """
         split tone score metrics for future analysis
         """
         split_col = f.split(f.col(self.tone), ",")
         tone_col = ["tone_score", "positive_score", "negative_score", "polarity", "act_ref_den", "self_group_den"]
-        tmp = tmp.withColumn(tone_col[0], split_col.getItem(0)) \
+        joined_table = joined_table.withColumn(tone_col[0], split_col.getItem(0)) \
             .withColumn(tone_col[1], split_col.getItem(1)) \
             .withColumn(tone_col[2], split_col.getItem(2)) \
             .withColumn(tone_col[3], split_col.getItem(3)) \
