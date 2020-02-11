@@ -5,7 +5,7 @@ import pyspark.sql.functions as f
 from pyspark.sql import SparkSession
 
 
-class Gdelt_Transformer(object):
+class GdeltTransformer(object):
     """
     read movie match-up table, perform .filter(), .join(), .split() tasks
     :return df with matched links and split tone score metrics
@@ -68,10 +68,12 @@ if __name__ == '__main__':
     # -- Load Configuration --
     config = ConfigParser()
     config.read(abspath('config.ini'))
+    
     # -- Init Spark --
     bucket = config.get('AWS', 'bucket')
     jar = config.get('AWS', 'jar')
     spark = SparkSession.builder.appName(bucket).config("spark.jars", jar).getOrCreate()
+    
     # -- Process Data --
     folder_name = "netflix"
     file_name = "movie_lookup.parquet"
@@ -82,7 +84,7 @@ if __name__ == '__main__':
         for m in range(1, 13):
             year = str(n).zfill(4)
             month = str(m).zfill(2)
-            df = Gdelt_Transformer(month, year, "TONE", df)
+            df = GdeltTransformer(month, year, "TONE", df)
             try:
                 df.match()
             except:
