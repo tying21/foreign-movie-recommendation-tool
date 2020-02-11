@@ -1,4 +1,4 @@
-#### Tables
+#### Tables Names
 df: joined table with GDELT and Netflix
 
 newdb_movie: movie look-up table
