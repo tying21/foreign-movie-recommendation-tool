@@ -46,6 +46,7 @@ class MovieTransformer(object):
         newdf = self.df.withColumn(self.newname, f.regexp_replace(f.col(self.colname), "\p{P}", ""))
         newdf = newdf.withColumn(self.newname, f.lower(f.trim(f.col(self.newname))))
         newdf = newdf.withColumn(self.newname, f.regexp_replace(f.col(self.newname), " ", "-"))
+        
         return newdf
 
     def explode_lookup(self, df):
@@ -62,6 +63,7 @@ class MovieTransformer(object):
                               f.split(f.col(self.director), ",\s*").cast(ArrayType(StringType())).alias(self.director))
         newdf = newdf.withColumn(self.cast, f.explode(f.col(self.cast)))
         newdf = newdf.withColumn(self.director, f.explode(f.col(self.director)))
+        
         return newdf
 
     def explode_db(self, df):
@@ -74,6 +76,7 @@ class MovieTransformer(object):
         newdf = newdf.withColumn(self.country, f.explode(f.col(self.country)))
         newdf = newdf.withColumn(self.genre, f.split(f.col(self.genre), ",\s*").cast(ArrayType(StringType())).alias(self.genre))
         newdf = newdf.withColumn(self.genre, f.explode(f.col(self.genre)))
+        
         return newdf
 
 
@@ -99,6 +102,7 @@ class Database(object):
             .option("driver", "org.postgresql.Driver") \
             .mode(mode).save()
 
+        
 class ReadCSV(object):
 
     def __init__(self,folder_name, file_name):
@@ -120,15 +124,18 @@ if __name__ == '__main__':
     # -- Load Configuration --
     config = ConfigParser()
     config.read(abspath('config.ini'))
+    
     # -- Init Spark --
     bucket = config.get('AWS', 'bucket')
     jar = config.get('AWS', 'jar')
     spark = SparkSession.builder.appName(bucket).config("spark.jars", jar).getOrCreate()
+    
     # -- Process Data --
     folder_name = "netflix"
     file_name = "netflix_titles.csv"
     csv_task = ReadCSV(folder_name, file_name)
     df = csv_task.load()
+    
     # -- Save movie match-up table to S3 as .parquet
     movie_db = MovieTransformer("title", "movie_title", "country", "listed_in", "director", "cast", df)
     newdb = movie_db.filter()
@@ -136,6 +143,7 @@ if __name__ == '__main__':
     lookup = movie_db.explode_lookup(newdb)
     parquet_file = "movie_lookup.parquet"
     csv_task.save_to_parquet(lookup, parquet_file)
+    
     # --Save move look-up table to PostgreSQL
     newdb = movie_db.explode_db(newdb)
     newdb = newdb.toDF('show_id', 'type', 'title', 'director', 'cast', 'country', 'date_added', 'release_year', 'rating', 'duration', 'listed_in', 'description', 'movie_title')
