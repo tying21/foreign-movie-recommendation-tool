@@ -1,6 +1,7 @@
 #### Tables
 df: joined table with GDELT and Netflix
 newdb_movie: movie look-up table
+
 Both tables are stored in PostgreSQL database.
 
 #### Get Started
