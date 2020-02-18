@@ -3,6 +3,7 @@ from os.path import abspath
 from configparser import ConfigParser
 import pyspark.sql.functions as f
 from pyspark.sql import SparkSession
+from pyspark.sql.functions import broadcast
 
 
 class GdeltTransformer(object):
@@ -29,7 +30,7 @@ class GdeltTransformer(object):
                                            header=True)
         cond = [g_df.SOURCEURLS.contains(movie_df.movie_title),
                 (g_df.PERSONS.contains(df.cast)) | (g_df.PERSONS.contains(movie_df.director))]
-        tmp = movie_df.join(g_df, on=cond)
+        tmp = g_df.join(broadcast(movie_df), on=cond)
         tmp = tmp.groupBy(tmp.show_id, tmp.movie_title, tmp.SOURCEURLS, tmp.NUMARTS, tmp.TONE).count().withColumn(
             "MONTH", f.lit(self.month)).withColumn("YEAR", f.lit(self.year))
         joined_table = self.col_split(tmp)
