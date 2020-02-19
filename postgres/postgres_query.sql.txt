@@ -1,6 +1,0 @@
-select df.movie_title, sum(df.num_of_arts), newdb_movie.release_year, newdb_movie.country
-from df 
-join newdb_movie on df.movie_title=newdb_movie.movie_title
-where df.publish_year = '2019' 
-group by df.movie_title, newdb_movie.release_year, newdb_movie.country
-order by sum(df.num_of_arts) DESC
