@@ -99,12 +99,11 @@ $ . ./ingestion/s3_gdelt.sh
 
 ## Configurations
 Configuration settings for PostgreSQL and AWS S3 bucket are stored in the respective files in `./spark/config.ini`.
-> Replace the names and paths of your S3 bucket `config/s3config.ini`.
+Replace the names and paths of your S3 bucket `config/s3config.ini`.
+Replace the names and paths of your S3 bucket `ingestion/s3_gdelt.sh`.
 
 ## Get Started
 Open the website at [http://datascalableplatform.me/](http://datascalableplatform.me/). Two graphs are shown on the interactive dashboard. 
 On the top is a world map, with countries highlighted and filtered by different release year, genre, type. 
 The bottom graph shows the Top 5 movies recommended by trending scores, and articles links of each movie through out the year. 
 Color blue on the spectrum bar of "Tone Score" means positive tone, color orange means negative tone.
-   
-
