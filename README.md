@@ -99,7 +99,8 @@ $ . ./ingestion/s3_gdelt.sh
 
 ## Configurations
 Configuration settings for PostgreSQL and AWS S3 bucket are stored in the respective files in `./spark/config.ini`.
-> Replace the names and paths of your S3 bucket `ingestion/s3_gdelt.sh`.
+Replace the names and paths of your S3 bucket `config/s3config.ini`.
+Replace the names and paths of your S3 bucket `ingestion/s3_gdelt.sh`.
 
 ## Get Started
 Open the website at [http://datascalableplatform.me/](http://datascalableplatform.me/). Two graphs are shown on the interactive dashboard. 
