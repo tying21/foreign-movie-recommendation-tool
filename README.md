@@ -2,7 +2,7 @@
 > ***Choose The Movie Like A Local! (Foreign Movie Recommendation Tool)***
 
 This is a project completed as part of the Insight Data Engineering program (New York, Winter 2020).
-Visit [datascalableplatform.me] (http://datascalableplatform.me/) for the interactive webpage. You can also watch a short demo [here](https://www.youtube.com/watch?v=AHPhHpsh51E).
+Visit (http://datascalableplatform.me/) for the interactive webpage. You can also watch a short demo [here](https://www.youtube.com/watch?v=AHPhHpsh51E).
 
 ***
 
